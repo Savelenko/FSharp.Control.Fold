@@ -90,3 +90,15 @@ module Fold =
 
     let map4 (f : 'b -> 'c -> 'd -> 'e -> 'f) fold1 fold2 fold3 fold4 =
         map (fun (b, c, d, e) -> f b c d e) (zip4 fold1 fold2 fold3 fold4)
+
+[<AutoOpen>]
+module CE =
+
+    type FoldBuilder () =
+        member _.BindReturn (fold, f) = Fold.map f fold
+        // TODO: Define BindNReturn?
+        member _.MergeSources (fold1, fold2) = Fold.zip fold1 fold2
+        member _.MergeSources3 (fold1, fold2, fold3) = Fold.zip3 fold1 fold2 fold3
+        member _.MergeSources4 (fold1, fold2, fold3, fold4) = Fold.zip4 fold1 fold2 fold3 fold4
+
+    let fold = FoldBuilder ()
