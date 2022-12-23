@@ -1,10 +1,10 @@
 # FSharp.Control.Fold
 
-This F# library makes it possible to represent folding of data structures like lists, sets, trees or stream-like values like sequences as _values_ of type `Fold<'a,'b>`. Smaller folds can be combined into larger folds using F# applicative computation expressions, again resulting in a value of type `Fold<'a,'b>`.
+Using this F# library (NuGet link here) you define folding of data structures or streams as _values_ of type `Fold<'a,'b>` and combine smaller folds into larger folds using F# applicative computation expressions.
 
-One benefit of this is that the programmer does not have to define combined folder functions manually, which gets tedious quickly as more folds are to be combined. Instead, combining folds is declarative and can reuse predefined fold values and is declarative. Another major benefit is that combining explicit-folds-as-values guarantees that the resulting `Fold` will go through the data structure (or stream) exactly once, folding individual constituent values _at the same time_. This is especially important and useful when evaluating, say, an F# sequence is effectful, for example when values are retrieved from a database.
+One benefit of this is that the programmer does not have to define combined folder functions manually, which gets tedious quickly as more folds are to be combined. Instead, combining folds is declarative and can reuse predefined fold values. Another major benefit is that combining explicit folds-as-values guarantees that the resulting `Fold<'a,'b>` will go through the data structure (or stream) exactly once, folding individual constituent values _at the same time_ and producing a `'b`. This is especially important and useful when evaluating, say, `seq<'a>` is effectful, for example when `'a` values are retrieved from a database.
 
-`FSharp.Control.Fold` is directly based on the Haskell library [foldl](https://hackage.haskell.org/package/foldl), although the definition of the main `Fold<'a,'b>` type is different.
+`FSharp.Control.Fold` is directly based on the Haskell library [foldl](https://hackage.haskell.org/package/foldl), although the definition of the main `Fold<'a,'b>` type is different as one-to-one port is impossible.
 
 ## Supported foldable types
 
@@ -39,9 +39,9 @@ Two or more folds can be combined into a single fold in an applicative computati
 
 ```fsharp
 let lengthAndSum : Fold<int, int * int> = fold {
-	let! length = length // Reuse an existing Fold, see above
-	and! sum = Fold.makeFold (+) 0 id
-	return (length, sum)
+    let! length = length // Reuse an existing Fold, see above
+    and! sum = Fold.makeFold (+) 0 id
+    return (length, sum)
 }
 ```
 
@@ -53,9 +53,9 @@ If you have your own foldable data type, for example `Tree<'a>`, then you can ma
 
 ```fsharp
 let foldl (fold : Fold<'a,'b>) (tree : Tree<'a>) : 'b =
-	fold.Elim { new FoldCont<_,_,_> with
-		member _.Apply step initial extract = extract (Tree.fold step initial tree)
-	}
+    fold.Elim { new FoldCont<_,_,_> with
+        member _.Apply step initial extract = extract (Tree.fold step initial tree)
+    }
 ```
 
 ## Status of the library
