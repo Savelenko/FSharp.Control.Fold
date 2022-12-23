@@ -13,7 +13,7 @@ let main args =
     printfn $"Example 1: {List.foldl length list}"
 
     // Example 2
-    let lengthAndSum = fold {
+    let lengthAndSum : Fold<int, int * int> = fold {
         let! length = length // Reuse an existing Fold
         and! sum = makeFold (+) 0 id
         return (length, sum)

@@ -48,3 +48,5 @@ module ValueOption =
         fold.Elim { new FoldCont<_,_,_> with
             member _.Apply step initial extract = extract (ValueOption.fold step initial option)
         }
+
+// TODO: Support for Result<'a,'b>.
