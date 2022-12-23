@@ -95,6 +95,7 @@ module Fold =
 module CE =
 
     type FoldBuilder () =
+        member _.Return a = Fold.ret a
         member _.BindReturn (fold, f) = Fold.map f fold
         // TODO: Define BindNReturn?
         member _.MergeSources (fold1, fold2) = Fold.zip fold1 fold2

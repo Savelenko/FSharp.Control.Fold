@@ -20,4 +20,10 @@ let main args =
     }
     printfn $"Example 2: {List.foldl lengthAndSum list}"
 
+    // Example 3
+    let constant result = fold {
+        return result
+    }
+    printfn $"""Example 3: {List.foldl (constant "Nothing to see here!") list}"""
+
     0
